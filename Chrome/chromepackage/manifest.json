@@ -1,0 +1,9 @@
+{
+  "name": "CpABEPlugin",
+  "version": "${FBSTRING_PLUGIN_VERSION}",
+  "description": "cpabe wrapper",
+
+	"plugins": [
+    { "path": "npCpABE.dll", "public": true }
+  ]
+}
