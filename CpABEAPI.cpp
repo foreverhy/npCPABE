@@ -146,12 +146,68 @@ GByteArray *read_file(const char *path) {
     return ret;
 }
 
-std::string abe_dec(const char *pub_path, const char *prv_path, const std::string &chphertext) {
-    //bswabe_pub_t *pub = bswabe_pub_unserialize(read_file(pub_path), 1);
-    //bswabe_prv_t *prv = bswabe_prv_unserialize(pub, read_file(prv_path), 1);
-    suck_file(const_cast<char*>(pub_path));
+// return 0 on succuess
+int abe_dec(const char *pub_path, const char *prv_path, const std::string &chphertext, std::string &message) {
+    bswabe_pub_t *pub = bswabe_pub_unserialize(
+            suck_file(const_cast<char*>(pub_path)), 1);
+    bswabe_prv_t *prv = bswabe_prv_unserialize(
+            pub,
+            suck_file(const_cast<char*>(prv_path)), 1);
+
+    GByteArray *cph_buf = g_byte_array_new();
+    g_byte_array_set_size(cph_buf, chphertext.size());
+    std::memcpy(cph_buf->data, chphertext.data(), chphertext.size());
+    bswabe_cph_t *cph = bswabe_cph_unserialize(pub, cph_buf, 1);
+    element_t m;
+    if (!bswabe_dec(pub, prv, cph, m)) {
+
+    }
+
+    free(pub);
+    free(prv);
+
+
+
     
-    return std::string();
+
+	/* read real file len as 32-bit big endian int */
+    //int msg_len = 0;
+    //std::string::const_iterator now = chphertext.begin();
+    //for (int i = 3; i >= 0; --i) {
+        //msg_len |= ((*now) << ((3 - i) << 3));
+        //++now;
+    //}
+
+	//[> read aes buf <]
+    //int len = 0;
+    //for (int i = 3; i >=0; --i) {
+        //len |= (*now) << (i << 3);
+        //++now;
+    //}
+    //g_byte_array_set_size(aes_buf, len);
+    //std::memcpy(aes_buf->data, &*now, len);
+    //now += len;
+
+	//[> read cph buf <]
+    //len = 0;
+    //for (int i = 3; i >= 0; --i) {
+        //len |= (*now) << (i << 3);
+        //++now;
+    //}
+    //g_byte_array_set_size(cph_buf, len);
+    //std::memcpy(cph_buf->data, &*now, len);
+    //now += len;
+    
+    //bswabe_cph_t *cph = bswabe_cph_unserialize(pub, cph_buf, 1);
+    //element_t m;
+    //if (!bswabe_dec(pub, prv, cph, m) ) {
+        //return 1;
+    //}
+    //bswabe_cph_free(cph);
+    
+    //plt = aes_128_cbc_decrypt(aes)
+
+
 }
 
 } // Anonymous namespace
