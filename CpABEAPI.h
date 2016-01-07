@@ -53,6 +53,7 @@ public:
                                        &CpABEAPI::get_version));
         // CP-ABE
         //registerMethod("setup", make_method(this, &CpABEAPI::setup));
+        registerMethod("get_token", make_method(this, &CpABEAPI::get_token));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -88,6 +89,7 @@ public:
     //std::string keygen(const std::string &pub, const std::string &msk, const FB::VariantList &attrs);
     //void keygen_file(const std::string &pub, const std::string &msk, const FB::VariantList &attrs);
     //void save_file(const std::string path)
+    std::string get_token(const std::string &uri);
 
 private:
     CpABEWeakPtr m_plugin;
