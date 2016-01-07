@@ -71,4 +71,7 @@ include_platform()
 # 	${PROJECT_NAME})
 
 #target_link_libraries(${PLUGIN_NAME} GLIB_LIBRARY GMP_LIBRARY CRYPTO_LIBRARY PBC_LIBRARY BSWABE_LIBRARY)
-target_link_libraries(${PLUGIN_NAME} glib-2.0 gmp crypto pbc ${CMAKE_CURRENT_SOURCE_DIR}/libbswabe.a)
+
+add_library(abecommon STATIC ${CMAKE_CURRENT_SOURCE_DIR}/common.c)
+
+target_link_libraries(${PLUGIN_NAME} glib-2.0 gmp crypto pbc ${CMAKE_CURRENT_SOURCE_DIR}/libbswabe.a abecommon)

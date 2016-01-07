@@ -52,7 +52,7 @@ public:
                          make_property(this,
                                        &CpABEAPI::get_version));
         // CP-ABE
-        registerMethod("setup", make_method(this, &CpABEAPI::setup));
+        //registerMethod("setup", make_method(this, &CpABEAPI::setup));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,10 @@ public:
     void testEvent();
 
     // CP-ABE methods, based on libbswabe
-    FB::VariantList setup();
+    //FB::VariantList setup();
+    //std::string keygen(const std::string &pub, const std::string &msk, const FB::VariantList &attrs);
+    //void keygen_file(const std::string &pub, const std::string &msk, const FB::VariantList &attrs);
+    //void save_file(const std::string path)
 
 private:
     CpABEWeakPtr m_plugin;
