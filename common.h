@@ -1,3 +1,5 @@
+#ifndef ABE_COMMON_H
+#define ABE_COMMON_H
 /*
 	Include glib.h and pbc.h before including this file.
 
@@ -41,4 +43,6 @@ GByteArray* aes_128_cbc_decrypt( GByteArray* ct, element_t k );
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
