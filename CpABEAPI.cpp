@@ -147,7 +147,7 @@ GByteArray *read_file(const char *path) {
 }
 
 // return 0 on succuess
-int abe_dec(const char *pub_path, const char *prv_path, const std::string &chphertext, std::string &message) {
+int do_dec(const char *pub_path, const char *prv_path, const std::string &chphertext, std::string &message) {
     bswabe_pub_t *pub = bswabe_pub_unserialize(
             suck_file(const_cast<char*>(pub_path)), 1);
     bswabe_prv_t *prv = bswabe_prv_unserialize(
@@ -210,4 +210,13 @@ std::string CpABEAPI::get_token(const std::string &uri) {
     return uri;
 }
 
+//  cipher is hex encoded
+std::string CpABEAPI::decrypt(const std::string &pub_path, const std::string &prv_path, const std::string &hex_cipher) {
+    std::string cipher = Hex::decode(hex_cipher);
+    std::string message;
+    if (do_dec(pub_path.data(), prv_path.data(), cipher, message)) {
+        return "";  
+    }
+    return Hex::encode(message);
+}
 
