@@ -26,15 +26,15 @@ class Hex {
         for (size_t i = 0; i < len; i += 2) {
             unsigned v = 0;
             char a = input[i], b = input[i + 1];
-            v += (a > '9') ? (a - 'A' + 10) : (a - '0');
+            v += (a > '9') ? (a - 'a' + 10) : (a - '0');
             v <<= 4;
-            v += (b > '9') ? (b - 'A' + 10) : (b - '0');
+            v += (b > '9') ? (b - 'a' + 10) : (b - '0');
             out.push_back(v);
         }
         return out;
     }
 
 };
-const std::string Hex::lut = "0123456789ABCDEF";
+const std::string Hex::lut = "0123456789abcdef";
 
 #endif
