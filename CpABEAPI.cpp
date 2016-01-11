@@ -21,6 +21,7 @@
 
 #include "bswcpabe.h"
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @fn FB::variant CpABEAPI::echo(const FB::variant& msg)
 ///
@@ -161,7 +162,7 @@ int do_dec(const char *pub_path, const char *prv_path, const std::string &chpher
     int msg_len = 0;
     std::string::const_iterator now = chphertext.begin();
     for (int i = 3; i >= 0; --i) {
-        msg_len |= ((*now) << ((3 - i) << 3));
+        msg_len |= (*now) << (i << 3);
         ++now;
     }
 
@@ -171,6 +172,7 @@ int do_dec(const char *pub_path, const char *prv_path, const std::string &chpher
         len |= (*now) << (i << 3);
         ++now;
     }
+    aes_buf = g_byte_array_new();
     g_byte_array_set_size(aes_buf, len);
     std::memcpy(aes_buf->data, &*now, len);
     now += len;
@@ -181,6 +183,7 @@ int do_dec(const char *pub_path, const char *prv_path, const std::string &chpher
         len |= (*now) << (i << 3);
         ++now;
     }
+    cph_buf = g_byte_array_new();
     g_byte_array_set_size(cph_buf, len);
     std::memcpy(cph_buf->data, &*now, len);
     now += len;
@@ -190,16 +193,17 @@ int do_dec(const char *pub_path, const char *prv_path, const std::string &chpher
     if (!bswabe_dec(pub, prv, cph, m) ) {
         return 1;
     }
+
     bswabe_cph_free(cph);
     
     plt = aes_128_cbc_decrypt(aes_buf, m);
     g_byte_array_set_size(plt, msg_len);
     g_byte_array_free(aes_buf, 1);
 
-    message = std::string(reinterpret_cast<char*>(plt->data), plt->len);
+    message = std::string(reinterpret_cast<const char*>(plt->data), plt->len);
     g_byte_array_free(plt, 1);
-    bswabe_pub_free(pub);
     bswabe_prv_free(prv);
+    bswabe_pub_free(pub);
 
     return 0;
 }
