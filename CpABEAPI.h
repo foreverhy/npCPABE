@@ -55,6 +55,7 @@ public:
         //registerMethod("setup", make_method(this, &CpABEAPI::setup));
         registerMethod("get_token", make_method(this, &CpABEAPI::get_token));
         registerMethod("decrypt", make_method(this, &CpABEAPI::decrypt));
+        registerMethod("get_attrs", make_method(this, &CpABEAPI::get_attrs));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -92,6 +93,8 @@ public:
     //void save_file(const std::string path)
     std::string get_token(const std::string &uri);
     std::string decrypt(const std::string &pub_path, const std::string &prv_path, const std::string &hex_cipher);
+
+    FB::VariantList get_attrs(const std::string &pub_path, const std::string &prv_path);
 
 private:
     CpABEWeakPtr m_plugin;

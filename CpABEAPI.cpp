@@ -20,6 +20,7 @@
 #include <boost/move/move.hpp>
 
 #include "bswcpabe.h"
+#include "private.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,6 +98,22 @@ void CpABEAPI::testEvent()
     //free(msk);
     //return FB::make_variant_list(ret);
 //}
+
+namespace {
+
+bool file_exists(const std::string &name) {
+    std::ifstream f(name.data());
+    bool ret = false;
+    if (f.good()) {
+        ret = true; 
+    }
+    f.close();
+    return ret;
+}
+
+
+
+}
 
 namespace {
 
@@ -216,11 +233,35 @@ std::string CpABEAPI::get_token(const std::string &uri) {
 
 //  cipher is hex encoded
 std::string CpABEAPI::decrypt(const std::string &pub_path, const std::string &prv_path, const std::string &hex_cipher) {
+    if ((!file_exists(pub_path)) || (!file_exists(prv_path))) {
+        return "";
+    }
     std::string cipher = Hex::decode(hex_cipher);
     std::string message;
     if (do_dec(pub_path.data(), prv_path.data(), cipher, message)) {
         return "";  
     }
     return Hex::encode(message);
+}
+
+
+FB::VariantList CpABEAPI::get_attrs(const std::string &pub_path, const std::string &prv_path) {
+    std::vector<std::string> attrs;
+
+    if ((!file_exists(pub_path)) || (!file_exists(prv_path))) {
+        return FB::make_variant_list(attrs);
+    }
+    
+    auto pub = bswabe_pub_unserialize(suck_file(const_cast<char*>(pub_path.data())), 1);
+    auto prv = bswabe_prv_unserialize(pub, suck_file(const_cast<char*>(prv_path.data())), 1);
+
+    for (size_t i = 0; i < prv->comps->len; ++i) {
+        attrs.push_back(g_array_index(prv->comps, bswabe_prv_comp_t, i).attr);
+    }
+
+    bswabe_prv_free(prv);
+    bswabe_pub_free(pub);
+
+    return FB::make_variant_list(attrs);
 }
 
